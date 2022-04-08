@@ -1,6 +1,6 @@
 from django import forms
 
-from customers.models import Profile
+from customers.models import Profile, Loan, LoanAccept
 
 
 class ProfileForm(forms.ModelForm):
@@ -20,3 +20,23 @@ def form_validation_error(form):
         for error in field.errors:
             msg += "%s: %s \\n" % (field.label if hasattr(field, 'label') else 'Error', error)
     return msg
+
+
+class LoanForm(forms.ModelForm):
+
+    class Meta:
+        model = Loan
+        fields = '__all__'
+        exclude = ['loaner']
+        widgets = {
+            'business_type': forms.Select(attrs={'class': 'custom-select md-form'}),
+        }
+
+
+class LoanAcceptForm(forms.ModelForm):
+    class Meta:
+        model = LoanAccept
+        fields = '__all__'
+        exclude = ['loan']
+
+
