@@ -1,4 +1,5 @@
 {% extends "layouts/base.html" %}
+{% load static %}
 
 {% block title %} Dashboard {% endblock %} 
 
@@ -404,7 +405,14 @@
                             </div>
                         </div>
                         <div class="card-body p-2">
-                            <div class="ct-chart-ranking ct-golden-section ct-series-a"></div>
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                            <script src="{% static 'assets/js/chart.js' %}"></script>
+                             <canvas id="myChart" width="400" height="400"></canvas>
+                            <script>window.onload = function () {
+                                chart1('{% url 'chart' %}')
+                            }</script>
+
+{#                            <div class="ct-chart-ranking ct-golden-section ct-series-a"></div>#}
                         </div>
                     </div>
                 </div>

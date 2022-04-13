@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum, Count, Max, DateField, CharField
+from django.db.models.functions import TruncMonth, ExtractMonth
 from django.templatetags.static import static
 from django.utils.translation import gettext as _
 
@@ -60,10 +62,26 @@ class Loan(models.Model):
     def __str__(self):
         return str(self.loaner)
 
+    @classmethod
+    def total_infor(cls):
+        return cls.objects.aggregate(total_amount_required=Sum('amount_required'), total_loan=Count('id'))
+
 
 class LoanAccept(models.Model):
     loan = models.OneToOneField(Loan, null=True, on_delete=models.CASCADE)
     accept = models.BooleanField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.loan)
+
+    @staticmethod
+    def total(boolean):
+        obj = LoanAccept.objects.filter(accept=boolean).aggregate(count=Count('id'))
+
+        return obj['count']
+
+    @classmethod
+    def total_by_month(cls):
+        return cls.objects.raw('SELECT FORMAT(created_at, "YYYY-MM") AS month, COUNT(*) AS count FROM '
+                               'customers_loanaccept GROUP BY month')
