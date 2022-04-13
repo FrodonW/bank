@@ -41,6 +41,13 @@ function chart1(url){
                     ],
                     borderWidth: 1
                 }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
         });
     })
