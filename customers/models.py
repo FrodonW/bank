@@ -1,3 +1,4 @@
+from itertools import count
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum, Count, Max, DateField, CharField
@@ -83,5 +84,4 @@ class LoanAccept(models.Model):
 
     @classmethod
     def total_by_month(cls):
-        return cls.objects.raw('SELECT FORMAT(created_at, "YYYY-MM") AS month, COUNT(*) AS count FROM '
-                               'customers_loanaccept GROUP BY month')
+        return cls.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(count=Count('id')).values('month', 'count').order_by()
