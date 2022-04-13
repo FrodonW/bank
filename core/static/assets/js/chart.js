@@ -5,11 +5,21 @@ function chart1(url){
     }).then(function(result){
         return result.json()
     }).then(function(data){
+        var abc = JSON.stringify(data.labels);
+        console.log(abc);
+        const myArray = abc.split(",");
+
+            for (let i = 0; i < myArray.length; i++) {
+                if (i == 0) { myArray[i] = myArray[i].substring(myArray[i].lastIndexOf("-"), myArray[i].lastIndexOf(" ")).slice(2);}
+                else {
+                    myArray[i] = myArray[i].substring(myArray[i].lastIndexOf("-"), myArray[i].lastIndexOf(" ")).slice(1);
+                    }
+            }
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: data.labels,
+                labels: myArray,
                 datasets: [{
                     label: 'labels',
                     data: data.data,
@@ -31,13 +41,6 @@ function chart1(url){
                     ],
                     borderWidth: 1
                 }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
             }
         });
     })
