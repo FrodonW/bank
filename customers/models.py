@@ -37,6 +37,10 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
 
+    @classmethod
+    def get_profile(cls):
+        return cls.objects.all().order_by('created_at')
+
 
 class Loan(models.Model):
     BUSINESS_TYPES = (

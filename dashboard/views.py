@@ -11,7 +11,7 @@ import json
 from django.template import loader, Context
 from django.views.generic import TemplateView
 
-from customers.models import LoanAccept, Loan
+from customers.models import LoanAccept, Loan, Profile
 
 
 def dashboard(request):
@@ -34,21 +34,12 @@ def dashboard(request):
     return HttpResponse(template_name.render(context, request))
 
 
-def defaultconverter(o):
-    if isinstance(o, datetime.datetime):
-        return o.__str__()
-
 def chart(request):
     # labels = ['thang 1']
     data1 = []
     total = LoanAccept.total_by_month()
     labels = [i['month'] for i in total]
     data = [i['count'] for i in total]
-
-
-
-
-    # [labels, data] = (LoanAccept.total_by_month())
     context = {
         'labels': labels,
         'data': data,
@@ -56,3 +47,6 @@ def chart(request):
     return JsonResponse(context)
 
 
+def table(request):
+    data = Profile.get_profile()
+    return JsonResponse({'data': data})
