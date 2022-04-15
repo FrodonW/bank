@@ -1,6 +1,9 @@
 import datetime
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.db.models import Sum
 from django.db.models.functions import ExtractMonth
 from django.http import HttpResponse, JsonResponse
@@ -9,6 +12,7 @@ import json
 
 # Create your views here.
 from django.template import loader, Context
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from customers.models import LoanAccept, Loan, Profile
@@ -34,9 +38,9 @@ def dashboard(request):
     return HttpResponse(template_name.render(context, request))
 
 
+@login_required()
+@staff_member_required()
 def chart(request):
-    # labels = ['thang 1']
-    data1 = []
     total = LoanAccept.total_by_month()
     labels = [i['month'] for i in total]
     data = [i['count'] for i in total]
@@ -47,6 +51,8 @@ def chart(request):
     return JsonResponse(context)
 
 
+@login_required()
+@staff_member_required()
 def table(request):
     data = Profile.get_profile()
-    return JsonResponse({'data': data})
+    return JsonResponse({'data': list(data)})

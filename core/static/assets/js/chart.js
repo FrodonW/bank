@@ -6,7 +6,6 @@ function chart1(url){
         return result.json()
     }).then(function(data){
         var abc = JSON.stringify(data.labels);
-        console.log(abc);
         const myArray = abc.split(",");
 
             for (let i = 0; i < myArray.length; i++) {

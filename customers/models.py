@@ -39,7 +39,9 @@ class Profile(models.Model):
 
     @classmethod
     def get_profile(cls):
-        return cls.objects.all().order_by('created_at')
+        return cls.objects.all().\
+            values("user__first_name", "user__last_name", "birthday", "gender", "phone", "address", "city").\
+            order_by('created_at')
 
 
 class Loan(models.Model):
