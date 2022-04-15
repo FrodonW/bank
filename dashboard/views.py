@@ -56,3 +56,18 @@ def chart(request):
 def table(request):
     data = Profile.get_profile()
     return JsonResponse({'data': list(data)})
+
+# customer dashboard
+
+
+def customer_dashboard(request, pk):
+    template_name = loader.get_template('dashboard_customer.html')
+
+    loan_count = Loan.total_infor(pk)['loan_count']
+    total_amount_required = Loan.total_infor(pk)['total_amount_required']
+
+    context = {
+        'loan_count': loan_count,
+        'total_amount_required': total_amount_required,
+    }
+    return HttpResponse(template_name.render(context, request))

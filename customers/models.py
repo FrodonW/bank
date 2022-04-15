@@ -69,9 +69,9 @@ class Loan(models.Model):
     def __str__(self):
         return str(self.loaner)
 
-    @classmethod
-    def total_infor(cls):
-        return cls.objects.aggregate(total_amount_required=Sum('amount_required'), total_loan=Count('id'))
+    @staticmethod
+    def total_infor(pk):
+        return Loan.objects.filter(id=pk).aggregate(total_amount_required=Sum('amount_required'), loan_count=Count('id'))
 
 
 class LoanAccept(models.Model):
