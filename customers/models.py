@@ -39,8 +39,8 @@ class Profile(models.Model):
 
     @classmethod
     def get_profile(cls):
-        return cls.objects.all().\
-            values("user__first_name", "user__last_name", "birthday", "gender", "phone", "address", "city").\
+        return cls.objects.filter(birthday__isnull=False). \
+            values("user__first_name", "user__last_name", "birthday", "gender", "phone", "address", "city"). \
             order_by('created_at')
 
 
@@ -50,7 +50,7 @@ class Loan(models.Model):
         ('FT', 'Food Truck'),
         ('CON', 'Construction'),
         ('OTH', 'Other')
-        )
+    )
     loaner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     amount_required = models.IntegerField(null=True)  # label = 'Amount required'
     business_type = models.CharField(max_length=50, choices=BUSINESS_TYPES, null=True)
@@ -70,15 +70,15 @@ class Loan(models.Model):
     def __str__(self):
         return str(self.loaner)
 
-    # @staticmethod
-    # def get_loan(pk):
-
-
-
+    @staticmethod
+    def get_loan(pk):
+        return Loan.objects.filter(loaner=pk).values('amount_required', 'business_type',
+                                                     'years_in_business', 'other', 'created_at')
 
     @staticmethod
     def total_infor(pk):
-        return Loan.objects.filter(loaner=pk).aggregate(total_amount_required=Sum('amount_required'), loan_count=Count('id'))
+        return Loan.objects.filter(loaner=pk).aggregate(total_amount_required=Sum('amount_required'),
+                                                        loan_count=Count('id'))
 
 
 class LoanAccept(models.Model):
@@ -97,4 +97,5 @@ class LoanAccept(models.Model):
 
     @classmethod
     def total_by_month(cls):
-        return cls.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(count=Count('id')).values('month', 'count').order_by()
+        return cls.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(count=Count('id')).values(
+            'month', 'count').order_by()

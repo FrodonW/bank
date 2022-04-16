@@ -77,6 +77,7 @@ def customer_dashboard(request, pk):
     return HttpResponse(template_name.render(context, request))
 
 
-# @login_required()
-# def customer_table(request, pk):
-#     data =
+@login_required()
+def customer_table(request, pk):
+    data = Loan.get_loan(pk)
+    return JsonResponse({'data': list(data)})
