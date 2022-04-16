@@ -56,6 +56,7 @@ class Loan(models.Model):
     business_type = models.CharField(max_length=50, choices=BUSINESS_TYPES, null=True)
     years_in_business = models.IntegerField(null=True)  # label='Years in business'
     other = models.CharField(max_length=64, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         super(Loan, self).save(*args, **kwargs)
@@ -69,9 +70,15 @@ class Loan(models.Model):
     def __str__(self):
         return str(self.loaner)
 
+    # @staticmethod
+    # def get_loan(pk):
+
+
+
+
     @staticmethod
     def total_infor(pk):
-        return Loan.objects.filter(id=pk).aggregate(total_amount_required=Sum('amount_required'), loan_count=Count('id'))
+        return Loan.objects.filter(loaner=pk).aggregate(total_amount_required=Sum('amount_required'), loan_count=Count('id'))
 
 
 class LoanAccept(models.Model):

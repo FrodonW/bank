@@ -5,19 +5,21 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.db.models import Sum
-from django.db.models.functions import ExtractMonth
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 import json
 
 # Create your views here.
-from django.template import loader, Context
+from django.template import loader
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+from core.utils import merge_dict
 
 from customers.models import LoanAccept, Loan, Profile
 
 
+@login_required()
+@staff_member_required()
 def dashboard(request):
     template_name = loader.get_template('dashboard.html')
 
@@ -26,14 +28,15 @@ def dashboard(request):
     loan_percen_reject = (total_loan and (LoanAccept.total(False) / total_loan * 100)) or 0
 
     customers_count = User.objects.filter(is_superuser=0, is_staff=0, is_active=1).count()
+    loan_amount_total = Loan.objects.all().aggregate(loan_amount_total=Sum('amount_required'))
 
-    context = {
+    data = {
         'customers_count': customers_count,
         'loan_percen_accept': loan_percen_accept,
         'loan_percen_reject': loan_percen_reject,
         'loan_percen_inprogress': 100 - loan_percen_reject - loan_percen_accept,
-
     }
+    context = merge_dict(data, loan_amount_total)
 
     return HttpResponse(template_name.render(context, request))
 
@@ -60,6 +63,7 @@ def table(request):
 # customer dashboard
 
 
+@login_required()
 def customer_dashboard(request, pk):
     template_name = loader.get_template('dashboard_customer.html')
 
@@ -71,3 +75,8 @@ def customer_dashboard(request, pk):
         'total_amount_required': total_amount_required,
     }
     return HttpResponse(template_name.render(context, request))
+
+
+# @login_required()
+# def customer_table(request, pk):
+#     data =

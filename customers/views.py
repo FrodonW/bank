@@ -66,39 +66,6 @@ class StaffView(SuccessMessageMixin, UpdateView):
     success_message = _('Widget was successfully updated')
     success_url = '/customers/staff/'
 
-    # def has_permission(self, request):
-    #     return request.user.is_staff
-
     def get_object(self, queryset=None):
         loans = LoanAccept.objects.filter(accept__isnull=True).first()
         return loans
-
-    # def get_success_url(self):
-    #     return redirect('staff')
-
-    # def form_valid(self, form):
-    #     loan_accept = form.cleaned_data.get('accept')
-    #     self.object.accept = loan_accept
-    #     self.object.save()
-    #     messages.info(self.request, _("saved!"))
-    #
-    #     return redirect('staff')
-
-
-
-
-    # def get(self, request):
-    #     context = {'loans': self.loans, 'segment': 'loans'}
-    #     return render(request, 'customers/loan_accept.html', context)
-
-    # def post(self, request):
-    #     form = LoanAcceptForm(request.POST, instance=self.loans)
-    #     if form.is_valid():
-    #         loan_accept = form.cleaned_data.get('accept')
-    #         self.loans.accept = loan_accept
-    #         self.loans.save()
-    #
-    #         messages.success(request, 'success')
-    #     else:
-    #         messages.error(request, 'error')
-    #     return redirect('staff')
