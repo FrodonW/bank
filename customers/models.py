@@ -40,8 +40,8 @@ class Profile(models.Model):
     @classmethod
     def get_profile(cls):
         return cls.objects.filter(birthday__isnull=False). \
-            values("user__first_name", "user__last_name", "birthday", "gender", "phone", "address", "city"). \
-            order_by('created_at')
+            values('id', "user__first_name", "user__last_name", "birthday", "gender",
+                   "phone", "address", "city", "loan__loanaccept__accept").order_by('created_at')
 
 
 class Loan(models.Model):

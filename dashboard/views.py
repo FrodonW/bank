@@ -28,7 +28,7 @@ def dashboard(request):
     loan_percen_reject = (total_loan and (LoanAccept.total(False) / total_loan * 100)) or 0
 
     customers_count = User.objects.filter(is_superuser=0, is_staff=0, is_active=1).count()
-    loan_amount_total = Loan.objects.all().aggregate(loan_amount_total=Sum('amount_required'))
+    loan_amount_total = Loan.objects.filter(loanaccept__accept=True).aggregate(loan_amount_total=Sum('amount_required'))
 
     data = {
         'customers_count': customers_count,
