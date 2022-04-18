@@ -12,18 +12,6 @@
 
         {% include 'includes/navigation.html' %}
 
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-            <div>
-                <div class="dropdown-menu dashboard-dropdown dropdown-menu-left mt-2">
-                    <a class="dropdown-item font-weight-bold" href="#"><span class="far fa-file-alt mr-2"></span>Document</a>
-                    <a class="dropdown-item font-weight-bold" href="#"><span class="far fa-comment-dots mr-2"></span>Message</a>
-                    <a class="dropdown-item font-weight-bold" href="#"><span class="fas fa-box-open mr-2"></span>Product</a>
-                    <div role="separator" class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold" href="#"><span
-                            class="fas fa-rocket text-danger mr-2"></span>Subscription Plan</a>
-                </div>
-            </div>
-        </div>
 
         <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -140,9 +128,6 @@
                                         {{ request.user.email }}
                                     </h5>
                                     <p class="text-gray mb-4">{{ profile.address|default:'' }}</p>
-                                    <a class="btn btn-sm btn-primary mr-2" href="#"><span
-                                            class="fas fa-user-plus mr-1"></span> Connect</a>
-                                    <a class="btn btn-sm btn-secondary" href="#">Send Message</a>
                                 </div>
                             </div>
                         </div>
