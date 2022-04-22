@@ -8,7 +8,15 @@ let btncallback = function ( e, cell) {
 };
 
 let btn = function( value, data, cell, row, options ) {
-    return `<button type="button" class="btn btn-sm btn-secondary">test</button>`;
+    return `<button type="button" class="btn btn-sm btn-secondary">
+            <nav class="navbar navbar-expand-sm bg-light">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:8000/customers/profile/">test</a>
+                    </li>
+                </ul>
+            </nav>
+            </button>`;
 };
 $.ajax({
     method: 'GET',
@@ -30,7 +38,7 @@ $.ajax({
             pagination:"local",
             paginationSize:7,
             columns:[                 //define the table columns
-                {title:"Id", field:"id", resizable:false},
+                {title:"Id", field:"id", resizable:false, width:50},
                 {title:"First name", field:"user__first_name", resizable:false},
                 {title:"Last name", field:"user__last_name", resizable:false},
                 {title:"Birthday", field:"birthday", formatter:"datetime", formatterParams:{
@@ -46,7 +54,7 @@ $.ajax({
                 {title:"Phone", field:"phone", resizable:false},
                 {title:"Address", field:"address", headerTooltip:true, resizable:false},
                 {title:"City", field:"city", resizable:false},
-                {title:"Action", formatter: btn, cellClick: btncallback, resizable:false},
+                {title:"Action", formatter: btn, cellClick: btncallback, resizable:false, width:80},
             ],
                 });
 
